@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- 启动扫描所有的controller -->
+	<context:component-scan
+		base-package="org.lot.lotfilter.controller" />
+
+	<mvc:annotation-driven />
+	<mvc:default-servlet-handler />
+	<!-- <context:annotation-config /> -->
+
+	<!-- 静态文件访问,主要是让DispatcherServlet不拦截以下静态资源 -->
+	<mvc:resources location="/img/" mapping="/img/**" />
+	<mvc:resources location="/js/" mapping="/js/**" />
+
+	<!-- 配置拦截器;对特定路径拦截 -->
+<!-- 	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/system/**/" />
+			<mvc:mapping path="/**/lottery/**/" />
+			<bean class="org.lot.lotfilter.interceptor.PageInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors> -->
+
+	<!-- 开放对上传功能的支持 -->
+	<!-- 配置文件上传类型解析器 multipartResolver -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件最大尺寸，单位为5MB -->
+		<property name="maxUploadSize" value="5000000" />
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="uploadTempDir" value="upload/temp" />
+	</bean>
+
+
+</beans>

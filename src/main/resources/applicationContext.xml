@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!--<context:annotation-config />效果等同于隐式注入 : AutowiredAnnotationBeanPostProcessor; 
+		RequiredAnnotationBeanPostProcessor; CommonAnnotationBeanPostProcessor; PersistenceAnnotationBeanPostProcessor 
+		效果等同于:<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor 
+		"/> -->
+	<!-- 注入需要使用的注解 -->
+	<context:annotation-config />
+	<context:property-placeholder location="classpath:database.properties" />
+	<!-- 扫描注解包 -->
+	<context:component-scan base-package="org.lot.lotfilter"></context:component-scan>
+
+	<!-- 创建 dataSource 数据源 -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${database.driver}" />
+		<property name="url" value="${database.url}" />
+		<property name="username" value="${database.user}" />
+		<property name="password" value="${database.password}" />
+	</bean>
+
+	<!-- 配置mybatis SqlSessionFactoryBean -->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+	</bean>
+
+
+	<!-- 扫描所有的mappr接口 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage"
+			value="org.lot.lotfilter.dao.mybatis"></property>
+	</bean>
+
+</beans>
